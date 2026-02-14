@@ -1,164 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Be My Valentine - Cinematic</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;font-family:'Montserrat',sans-serif;overflow:hidden;background:black;color:white;display:flex;justify-content:center;align-items:center;position:relative;}
-
-/* Background video */
-video#bgVideo{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-3;filter:brightness(0.3);}
-.overlay{position:absolute;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:-2;}
-
-/* Slides */
-.slides{position:relative;width:100%;height:100%;overflow:hidden;}
-.slide{
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;
-  opacity:0;transition:opacity 1s ease;
-}
-.slide.active{opacity:1;z-index:2;}
-
-/* Headings and subtitle */
-h1{font-family:'Playfair Display',serif;font-size:50px;letter-spacing:1px;margin-bottom:20px;}
-.subtitle{font-size:20px;opacity:0.9;margin-bottom:30px;max-width:700px;}
-
-/* Buttons */
-.btn{
-  padding:8px 25px;font-size:14px;letter-spacing:1.5px;border:none;border-radius:25px;font-weight:bold;cursor:pointer;margin:10px;display:inline-flex;align-items:center;justify-content:center;position:relative;transition:0.4s ease;
-}
-.btn-accept{background-color:#ff4e50;color:white;box-shadow:0 0 15px #ff4e50;animation:glow 1.5s infinite alternate;}
-.btn-accept:hover{transform:scale(1.2);box-shadow:0 0 30px #ff4e50,0 0 50px #ff1c68;}
-.btn-decline{background-color:#4eafff;color:white;}
-
-/* Wings */
-.wing::before,.wing::after{content:"✨";font-size:12px;margin:0 5px;display:inline-block;}
-.wing{display:inline-flex;align-items:center;justify-content:center;}
-
-/* Glow animation */
-@keyframes glow{from{box-shadow:0 0 15px #ff4e50;}to{box-shadow:0 0 35px #ff4e50,0 0 50px #ff1c68;}}
-
-/* Map and airplane */
-.map{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;}
-.map svg{width:100%;height:100%;}
-.path{stroke:#ff4e50;stroke-width:3;fill:none;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pathDraw 4s forwards;}
-@keyframes pathDraw{to{stroke-dashoffset:0;}}
-#plane{position:absolute;width:40px;height:40px;transform:translate(-20px,-20px);z-index:3;}
-
-/* Floating elements */
-.floating{position:absolute;font-size:24px;animation:floating 4s ease-in-out infinite;}
-@keyframes floating{0%{transform:translateY(0);}50%{transform:translateY(-20px);}100%{transform:translateY(0);}}
-</style>
-</head>
-
-<body>
-<video id="bgVideo" autoplay muted loop>
-  <source src="yourvideo.mp4" type="video/mp4">
-</video>
-<div class="overlay"></div>
-
-<!-- Airplane -->
-<div id="plane">✈️</div>
-
-<div class="slides">
-  <!-- Slide 1 -->
-  <div class="slide active">
-    <h1 id="typeText1"></h1>
-    <div class="subtitle" id="subtitle1"></div>
-  </div>
-
-  <!-- Slide 2 -->
-  <div class="slide">
-    <h1 id="typeText2"></h1>
-    <div class="subtitle" id="subtitle2"></div>
-    <div class="floating" style="top:40%;left:20%;">✈️</div>
-    <div class="floating" style="top:60%;left:70%;">🍰</div>
-  </div>
-
-  <!-- Slide 3 -->
-  <div class="slide">
-    <h1>Finally arrived in Chennai…</h1>
-    <div class="subtitle">The journey is almost complete</div>
-    <div class="map">
-      <svg viewBox="0 0 800 600">
-        <path class="path" d="M100,500 C300,400 500,300 700,100"/>
-      </svg>
-    </div>
-  </div>
-
-  <!-- Slide 4 -->
-  <div class="slide">
-    <h1>And found her ❤️ my soulmate!</h1>
-    <div class="subtitle">She loves baking 🍰 and traveling ✈️</div>
-    <div>
-      <div class="btn btn-accept" id="acceptBtn"><span class="wing"></span>ACCEPT<span class="wing"></span></div>
-      <div class="btn btn-decline" id="declineBtn"><span class="wing"></span>DECLINE<span class="wing"></span></div>
-    </div>
-  </div>
-
-  <!-- Slide 5 -->
-  <div class="slide">
-    <h1>She Said YES ❤️</h1>
-    <div class="subtitle">Our journey together begins…</div>
-    <div class="floating" style="top:40%;left:50%;">🎉</div>
-    <div class="floating" style="top:60%;left:30%;">💖</div>
-  </div>
-</div>
-
 <script>
 // Typing effect
-function typeText(element,text,speed=50,callback){
-  let i=0;
-  function type(){if(i<text.length){element.innerHTML+=text[i];i++;setTimeout(type,speed);}else if(callback){callback();}}
+function typeText(element, text, speed=50, callback) {
+  let i = 0;
+  element.innerHTML = "";
+  function type() {
+    if (i < text.length) {
+      element.innerHTML += text[i];
+      i++;
+      setTimeout(type, speed);
+    } else {
+      if (callback) callback();
+    }
+  }
   type();
 }
-typeText(document.getElementById("typeText1"),"Started my journey in Mumbai…");
-typeText(document.getElementById("typeText2"),"Traveling around the world…");
 
-// Slide logic
-let currentSlide=0;
-const slides=document.querySelectorAll(".slide");
-function nextSlide(){
+// Slide elements
+const slides = document.querySelectorAll(".slide");
+let currentSlide = 0;
+
+// Auto type first slide & then move to next
+typeText(document.getElementById("typeText1"), "Started my journey in Mumbai…", 60, () => {
+  setTimeout(() => nextSlide(), 1500);
+});
+
+// Also type second slide text ahead of time (but hidden)
+typeText(document.getElementById("typeText2"), "Traveling around the world…", 60);
+
+// Slide changer
+function nextSlide() {
   slides[currentSlide].classList.remove("active");
   currentSlide++;
-  if(currentSlide>=slides.length) currentSlide=slides.length-1;
+  if (currentSlide >= slides.length) {
+    currentSlide = slides.length - 1;
+  }
   slides[currentSlide].classList.add("active");
+
+  // If arriving at slide 2, show travel text
+  if (currentSlide === 1) {
+    document.getElementById("subtitle2").innerHTML = "Exploring places ✈️ and dreaming of meeting her 🍰";
+  }
 }
 
-// Decline / Accept
-const declineBtn=document.getElementById("declineBtn");
-const acceptBtn=document.getElementById("acceptBtn");
-const excuses=["I forgot my heart in Paris ✨","The stars aren’t aligned 🌙","Too many meetings ☕","My cat disagrees 😼","I need more coffee ☕","I’m late for my wings 🪽"];
-if(declineBtn){
-  declineBtn.addEventListener("mouseenter",()=>{
-    const x=Math.random()*(window.innerWidth-150);
-    const y=Math.random()*(window.innerHeight-150);
-    declineBtn.style.transform=`translate(${x}px,${y}px) rotate(${Math.random()*30-15}deg)`;
+// Accept / Decline buttons logic
+document.addEventListener("click", () => {
+  if (currentSlide === 1) {
+    nextSlide();
+  }
+});
+
+// Decline button flying
+const declineBtn = document.getElementById("declineBtn");
+const excuses = [
+  "I forgot my heart in Paris ✨",
+  "The stars aren’t aligned 🌙",
+  "Too many meetings ☕",
+  "My cat disagrees 😼",
+  "I need more coffee ☕",
+  "I’m late for my wings 🪽"
+];
+if (declineBtn) {
+  declineBtn.addEventListener("mouseenter", () => {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 150);
+    declineBtn.style.transform = `translate(${x}px,${y}px) rotate(${Math.random() * 30 - 15}deg)`;
+    document.querySelector(".slide:nth-child(4) .subtitle").innerHTML =
+      excuses[Math.floor(Math.random() * excuses.length)];
   });
 }
-if(acceptBtn){
-  acceptBtn.addEventListener("click",()=>{nextSlide();});
+
+// Instant accept button
+const acceptBtn = document.getElementById("acceptBtn");
+if (acceptBtn) {
+  acceptBtn.addEventListener("click", () => {
+    nextSlide();
+  });
+}
 
 // Animate airplane along path
-const plane=document.getElementById("plane");
-const path=document.querySelector(".path");
-if(path&&plane){
-  const length=path.getTotalLength();
-  let progress=0;
-  function animatePlane(){
-    if(currentSlide>=3) return; // only during slides 1-3
-    progress+=0.002;
-    if(progress>1) progress=1;
-    const point=path.getPointAtLength(length*progress);
-    plane.style.left=point.x+"px";
-    plane.style.top=point.y+"px";
+const plane = document.getElementById("plane");
+const pathEl = document.querySelector(".path");
+if (plane && pathEl) {
+  const length = pathEl.getTotalLength();
+  let progress = 0;
+  function animatePlane() {
+    if (currentSlide < 3) {
+      progress += 0.002;
+      if (progress > 1) progress = 1;
+      const point = pathEl.getPointAtLength(length * progress);
+      plane.style.left = point.x + "px";
+      plane.style.top = point.y + "px";
+    }
     requestAnimationFrame(animatePlane);
   }
   animatePlane();
 }
-}
 </script>
-</body>
-</html>
