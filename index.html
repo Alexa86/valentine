@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Soulmate?</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
 
 <style>
 *{
@@ -21,21 +21,31 @@ body{
     overflow:hidden;
 }
 
-video{
+/* Animated Luxury Background */
+.bg-animation{
     position:fixed;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
-    object-fit:cover;
+    background:
+        radial-gradient(circle at 20% 30%, #ff0055 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, #ff3b6b 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000 70%);
+    background-size:200% 200%;
+    animation:moveBg 12s ease infinite;
     z-index:-2;
+}
+
+@keyframes moveBg{
+    0%{background-position:0% 0%;}
+    50%{background-position:100% 100%;}
+    100%{background-position:0% 0%;}
 }
 
 .overlay{
     position:fixed;
     width:100%;
     height:100%;
-    background:linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.95));
+    background:linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
     z-index:-1;
 }
 
@@ -47,10 +57,10 @@ video{
     align-items:center;
     text-align:center;
     padding:20px;
-    backdrop-filter:blur(0px);
-    transition:0.5s;
+    transition:0.4s;
 }
 
+/* Slow Reveal */
 h1{
     font-family:'Playfair Display',serif;
     font-size:clamp(28px,5vw,48px);
@@ -60,17 +70,18 @@ h1{
 }
 
 .name{
-    font-size:clamp(20px,4vw,36px);
+    font-size:clamp(22px,4vw,36px);
     margin-top:10px;
     color:#ff3b6b;
     opacity:0;
-    letter-spacing:5px;
+    letter-spacing:15px;
     animation:fadeInName 3s ease forwards 1.5s;
 }
 
 .subtitle{
     margin-top:20px;
     opacity:0;
+    font-weight:300;
     animation:fadeIn 2s ease forwards 2.5s;
 }
 
@@ -78,9 +89,9 @@ h1{
     margin-top:40px;
     display:flex;
     flex-direction:column;
-    gap:20px;
+    gap:18px;
     width:100%;
-    max-width:320px;
+    max-width:300px;
 }
 
 button{
@@ -92,25 +103,28 @@ button{
     transition:0.4s;
 }
 
+/* ACCEPT */
 #yes{
     background:#ff0055;
     color:white;
-    font-weight:bold;
+    font-weight:600;
     box-shadow:0 0 20px rgba(255,0,85,0.6);
 }
 
+/* DECLINE */
 #no{
     background:transparent;
     border:1px solid white;
     color:white;
-    position:relative;
 }
 
+/* Final Screen */
 .final{
-    font-size:clamp(24px,5vw,44px);
+    font-size:clamp(26px,5vw,44px);
     animation:fadeIn 1.5s ease forwards;
 }
 
+/* Animations */
 @keyframes reveal{
     to{opacity:1; transform:translateY(0);}
 }
@@ -120,7 +134,7 @@ button{
 }
 
 @keyframes fadeInName{
-    0%{opacity:0; letter-spacing:20px;}
+    0%{opacity:0; letter-spacing:25px;}
     100%{opacity:1; letter-spacing:5px;}
 }
 
@@ -135,15 +149,16 @@ button{
 </head>
 <body>
 
-<video autoplay muted loop>
-<source src="YOUR_VIDEO_LINK_HERE.mp4" type="video/mp4">
-</video>
-
+<div class="bg-animation"></div>
 <div class="overlay"></div>
 
 <div class="container" id="container">
+
     <h1>Will You Be My Soulmate?</h1>
-    <div class="name">Darling</div>
+
+    <!-- 🔥 CHANGE HER NAME HERE -->
+    <div class="name">HER NAME HERE</div>
+
     <div class="subtitle">Some stories are written by destiny…</div>
 
     <div class="buttons">
@@ -152,6 +167,7 @@ button{
     </div>
 
     <div class="swipeHint">Swipe right if you believe in fate ✨</div>
+
 </div>
 
 <script>
@@ -172,21 +188,45 @@ const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
 const container=document.getElementById("container");
 
-// Decline Logic
+/* DECLINE PRESSURE EFFECT */
 noBtn.addEventListener("click",()=>{
     if(declineCount<declineMessages.length){
         noBtn.innerText=declineMessages[declineCount];
         declineCount++;
     }
 
-    yesScale+=0.1;
+    yesScale+=0.12;
     yesBtn.style.transform=`scale(${yesScale})`;
     yesBtn.style.boxShadow=`0 0 ${20+declineCount*15}px rgba(255,0,85,0.9)`;
 
     container.style.backdropFilter="blur(6px)";
 });
 
-// Accept
+/* ACCEPT CLICK */
 yesBtn.addEventListener("click",()=>{
     container.innerHTML=`
         <div class="final">
+        SOULMATE CONFIRMED ❤️<br><br>
+        FOREVER STARTS NOW
+        </div>
+    `;
+});
+
+/* SWIPE RIGHT FOR MOBILE */
+let touchStartX=0;
+
+document.addEventListener("touchstart",(e)=>{
+    touchStartX=e.changedTouches[0].screenX;
+});
+
+document.addEventListener("touchend",(e)=>{
+    let touchEndX=e.changedTouches[0].screenX;
+
+    if(touchEndX-touchStartX>100){
+        yesBtn.click();
+    }
+});
+</script>
+
+</body>
+</html>
