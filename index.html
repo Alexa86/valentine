@@ -1,259 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Will You Be My Soulmate? 💖</title>
+<title>ALEXANDER — Valentine Collection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{
-overflow:hidden;
-text-align:center;
-color:white;
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Background Video */
-video{
-position:fixed;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:-2;
+body, html {
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    background: black;
+    color: white;
 }
 
-.overlay{
-position:fixed;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.65);
-z-index:-1;
+/* Fullscreen background video */
+video#bgVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.3); /* darken for luxury feel */
 }
 
-/* Center Container */
-.container{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:90%;
-max-width:500px;
+/* Centered content */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 0 20px;
 }
 
-/* Romantic Title */
-h1{
-font-size:32px;
-margin-bottom:20px;
-animation:glow 2s infinite alternate;
+/* Brand */
+.brand {
+    font-size: 16px;
+    letter-spacing: 5px;
+    font-weight: 300;
+    margin-bottom: 10px;
 }
 
-@keyframes glow{
-from{text-shadow:0 0 10px #ff4da6;}
-to{text-shadow:0 0 30px #ff1a8c;}
+/* Main heading */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 70px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+/* Subtitle */
+.subtitle {
+    font-size: 18px;
+    opacity: 0.7;
+    margin-bottom: 40px;
 }
 
 /* Buttons */
-button{
-padding:14px 28px;
-margin:10px;
-font-size:18px;
-border:none;
-border-radius:40px;
-cursor:pointer;
-transition:0.3s;
+.btn {
+    padding: 12px 40px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    border: 1px solid white;
+    background: transparent;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.3s ease;
 }
 
-#accept{
-background:linear-gradient(45deg,#ff66cc,#ff1a8c);
-color:white;
+.btn:hover {
+    background: white;
+    color: black;
 }
-
-#decline{
-background:gray;
-color:white;
-position:absolute;
-}
-
-/* Floating Hearts */
-.heart{
-position:absolute;
-font-size:22px;
-animation:floatUp 5s linear infinite;
-}
-
-@keyframes floatUp{
-0%{transform:translateY(0) scale(1);opacity:1;}
-100%{transform:translateY(-800px) scale(2);opacity:0;}
-}
-
-/* Game Hearts */
-.game-heart{
-position:absolute;
-font-size:30px;
-cursor:pointer;
-}
-
-/* Fireworks */
-.firework{
-position:absolute;
-width:5px;
-height:5px;
-background:white;
-border-radius:50%;
-animation:explode 1s ease-out forwards;
-}
-
-@keyframes explode{
-to{
-transform:scale(10);
-opacity:0;
-}
-}
-
-/* Confetti */
-.confetti{
-position:absolute;
-width:8px;
-height:8px;
-background:red;
-animation:fall 3s linear forwards;
-}
-
-@keyframes fall{
-to{
-transform:translateY(800px) rotate(360deg);
-opacity:0;
-}
-}
-
 </style>
 </head>
+
 <body>
 
-<video autoplay muted loop>
-<source src="yourvideo.mp4" type="video/mp4">
+<video id="bgVideo" autoplay muted loop>
+    <source src="yourvideo.mp4" type="video/mp4">
 </video>
 
-<div class="overlay"></div>
-
-<audio id="bgMusic" src="bg.mp3" autoplay loop></audio>
-<audio id="heartbeat" src="heartbeat.mp3"></audio>
-
-<div class="container" id="gameContainer">
-<h1>Catch 5 Hearts To Unlock My Proposal 💘</h1>
-<p id="score">Hearts Collected: 0 / 5</p>
-</div>
-
-<div class="container" id="proposal" style="display:none;">
-<h1 id="question"></h1>
-<button id="accept">YES 💍</button>
-<button id="decline">NO 😢</button>
+<div class="container">
+    <div class="brand">ALEXANDER</div>
+    <h1>VALENTINE</h1>
+    <div class="subtitle">2026 LIMITED COLLECTION</div>
+    <button class="btn" onclick="showProposal()">ENTER</button>
 </div>
 
 <script>
-
-let score=0;
-const scoreText=document.getElementById("score");
-const gameContainer=document.getElementById("gameContainer");
-const proposal=document.getElementById("proposal");
-const question=document.getElementById("question");
-const heartbeat=document.getElementById("heartbeat");
-
-/* 🎮 MINI LOVE GAME */
-function createGameHeart(){
-const heart=document.createElement("div");
-heart.classList.add("game-heart");
-heart.innerHTML="💖";
-heart.style.left=Math.random()*window.innerWidth+"px";
-heart.style.top=Math.random()*window.innerHeight+"px";
-document.body.appendChild(heart);
-
-heart.onclick=function(){
-score++;
-scoreText.innerHTML="Hearts Collected: "+score+" / 5";
-heart.remove();
-if(score>=5){
-unlockProposal();
-}
-};
+function showProposal() {
+    const container = document.querySelector('.container');
+    container.innerHTML = `
+        <div class="brand">EXCLUSIVE DROP</div>
+        <h1>Will You Be My Valentine?</h1>
+        <div class="subtitle">Only one piece available</div>
+        <button class="btn" onclick="yesClick()">ACCEPT</button>
+        <button class="btn" onclick="declineClick()">DECLINE</button>
+    `;
 }
 
-for(let i=0;i<5;i++){createGameHeart();}
-
-function unlockProposal(){
-gameContainer.style.display="none";
-proposal.style.display="block";
-typeWriter("Will You Be My Soulmate Forever? 💖");
+function yesClick() {
+    const container = document.querySelector('.container');
+    container.innerHTML = `
+        <h1>ACCESS GRANTED ❤️</h1>
+        <div class="subtitle">Welcome to forever</div>
+    `;
 }
 
-/* 💌 TYPEWRITER EFFECT */
-function typeWriter(text){
-let i=0;
-let speed=60;
-function typing(){
-if(i<text.length){
-question.innerHTML+=text.charAt(i);
-i++;
-setTimeout(typing,speed);
+function declineClick() {
+    alert("You can’t resist this drop 😏");
 }
-}
-typing();
-}
-
-/* ❌ ESCAPE DECLINE */
-const declineBtn=document.getElementById("decline");
-declineBtn.addEventListener("mouseover",function(){
-declineBtn.style.top=Math.random()*window.innerHeight+"px";
-declineBtn.style.left=Math.random()*window.innerWidth+"px";
-});
-
-/* ✅ ACCEPT MAGIC */
-document.getElementById("accept").onclick=function(){
-heartbeat.play();
-question.innerHTML="You Just Made My World Complete 😭💖✨";
-
-startConfetti();
-startFireworks();
-floatingHearts();
-};
-
-/* 🎉 CONFETTI */
-function startConfetti(){
-for(let i=0;i<100;i++){
-const confetti=document.createElement("div");
-confetti.classList.add("confetti");
-confetti.style.left=Math.random()*window.innerWidth+"px";
-confetti.style.background="hsl("+Math.random()*360+",100%,50%)";
-document.body.appendChild(confetti);
-setTimeout(()=>confetti.remove(),3000);
-}
-}
-
-/* 🎆 FIREWORKS */
-function startFireworks(){
-setInterval(()=>{
-const firework=document.createElement("div");
-firework.classList.add("firework");
-firework.style.left=Math.random()*window.innerWidth+"px";
-firework.style.top=Math.random()*window.innerHeight/2+"px";
-firework.style.background="hsl("+Math.random()*360+",100%,50%)";
-document.body.appendChild(firework);
-setTimeout(()=>firework.remove(),1000);
-},500);
-}
-
-/* 💖 FLOATING HEARTS */
-function floatingHearts(){
-setInterval(()=>{
-const heart=document.createElement("div");
-heart.classList.add("heart");
-heart.innerHTML="💖";
-heart.style.left=Math.random()*window.innerWidth+"px";
-heart.style.top=window.innerHeight+"px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),5000);
-},300);
-}
-
 </script>
+
 </body>
 </html>
