@@ -1,12 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SOULMATE — A Lifetime Exclusive</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    overflow: hidden;
+    background: black;
+}
+
+/* Background Video */
+video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45);
+    z-index: -2;
+    transition: transform 2s ease;
+}
+
+/* Overlay */
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: -1;
+    transition: background 1s ease;
+}
+
+/* Main Content */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    letter-spacing: 3px;
+    opacity: 0;
+    animation: fadeLuxury 2.5s ease forwards;
+}
+
+@keyframes fadeLuxury {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.brand {
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 60px;
+    margin: 10px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.btn {
+    padding: 15px 45px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    border: 1px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    transition: 0.4s ease;
+    margin: 10px;
+}
+
+#yes {
+    background: linear-gradient(45deg,#ff004c,#ff5e7e);
+    border: none;
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 20px rgba(255,0,80,0.6); }
+    50% { box-shadow: 0 0 60px rgba(255,0,80,1); }
+    100% { box-shadow: 0 0 20px rgba(255,0,80,0.6); }
+}
+
+#no {
+    position: absolute;
+}
+
+/* Floating Particles */
+@keyframes floatParticle {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-1000px); }
+}
+
+/* Mobile Responsive */
+@media(max-width:768px){
+    h1 { font-size: 38px; }
+    .btn { padding: 12px 25px; font-size: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<video autoplay muted loop>
+    <source src="yourvideo.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<div class="container">
+    <div class="brand">A LIFETIME EXCLUSIVE</div>
+    <h1>WILL YOU BE MY SOULMATE?</h1>
+    <div class="subtitle">ONLY ONE HEART AVAILABLE</div>
+    <button class="btn" id="yes" onclick="yesClick()">CHOOSE FOREVER</button>
+    <button class="btn" id="no" onmouseover="moveNo()">NOT TODAY</button>
+</div>
+
+<script>
+
 let declineMessages = [
     "Are you absolutely sure?",
     "Luxury decisions matter...",
     "Only one soulmate available.",
     "This is a lifetime exclusive.",
-    "Reconsider carefully...",
     "Compatibility: 99.8%",
-    "Final answer?",
-    "Destiny is watching..."
+    "Reconsider carefully...",
+    "Destiny is watching...",
+    "Final answer?"
 ];
 
 let declineCount = 0;
@@ -15,46 +150,28 @@ let yesScale = 1;
 const overlay = document.querySelector(".overlay");
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
+const video = document.querySelector("video");
 
 /* Floating particles */
 function createParticles() {
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 40; i++) {
         let particle = document.createElement("div");
         particle.style.position = "absolute";
-        particle.style.width = "4px";
-        particle.style.height = "4px";
+        particle.style.width = "3px";
+        particle.style.height = "3px";
         particle.style.background = "white";
         particle.style.borderRadius = "50%";
         particle.style.left = Math.random() * window.innerWidth + "px";
         particle.style.top = Math.random() * window.innerHeight + "px";
         particle.style.opacity = Math.random();
-        particle.style.animation = "floatParticle 10s linear infinite";
+        particle.style.animation = "floatParticle 12s linear infinite";
         document.body.appendChild(particle);
     }
 }
-
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes floatParticle {
-    from { transform: translateY(0px); }
-    to { transform: translateY(-1000px); }
-}
-
-@keyframes pulseGlow {
-    0% { box-shadow: 0 0 20px rgba(255,0,80,0.6); }
-    50% { box-shadow: 0 0 60px rgba(255,0,80,1); }
-    100% { box-shadow: 0 0 20px rgba(255,0,80,0.6); }
-}
-`;
-document.head.appendChild(style);
-
-yesBtn.style.animation = "pulseGlow 2s infinite";
-
 createParticles();
 
 function moveNo() {
 
-    // Change text
     if (declineCount < declineMessages.length) {
         noBtn.innerText = declineMessages[declineCount];
         declineCount++;
@@ -62,20 +179,15 @@ function moveNo() {
         noBtn.innerText = "Last chance...";
     }
 
-    // Move randomly
     noBtn.style.left = Math.random() * (window.innerWidth - 250) + "px";
     noBtn.style.top = Math.random() * (window.innerHeight - 120) + "px";
 
-    // Grow ACCEPT
     yesScale += 0.12;
     yesBtn.style.transform = `scale(${yesScale})`;
 
-    // Darken background slightly
     overlay.style.background = `rgba(0,0,0,${0.3 + declineCount * 0.05})`;
 
-    // Slight zoom cinematic effect
-    document.querySelector("video").style.transform =
-        `scale(${1 + declineCount * 0.02})`;
+    video.style.transform = `scale(${1 + declineCount * 0.02})`;
 }
 
 function yesClick() {
@@ -85,8 +197,7 @@ function yesClick() {
         <div class="subtitle">FOREVER STARTS NOW</div>
     `;
 
-    // Heart explosion
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 100; i++) {
         let heart = document.createElement("div");
         heart.innerHTML = "❤️";
         heart.style.position = "absolute";
@@ -107,3 +218,8 @@ function yesClick() {
         }, 2000);
     }
 }
+
+</script>
+
+</body>
+</html>
