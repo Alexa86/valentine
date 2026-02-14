@@ -42,6 +42,8 @@ video {
     transform: translate(-50%, -50%);
     text-align: center;
     letter-spacing: 3px;
+    opacity: 0;
+    animation: fadeLuxury 2.5s ease forwards;
 }
 
 .brand {
@@ -81,6 +83,12 @@ h1 {
 #no {
     position: absolute;
 }
+
+@keyframes fadeLuxury {
+    from { opacity: 0; transform: translate(-50%, -40%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
 </style>
 </head>
 
